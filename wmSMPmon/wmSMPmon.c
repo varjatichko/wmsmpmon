@@ -177,9 +177,9 @@ int main(int argc, char **argv)
 				if (NumCPUs == 2 && i == 1) {
 					offset=2;
 				}
-				copyXPMArea(108, 0, load_width, HAUTEUR, 5 + i * load_width + offset, 5);
+				copyXPMArea(108, 0, load_width, HAUTEUR, 4 + i * load_width + offset, 5);
 				copyXPMArea(108, 32 + delta, load_width, CPU_Load[i],
-				    5 + i * load_width + offset, 5 + delta);
+				    4 + i * load_width + offset, 5 + delta);
 			}
 			load = load / NumCPUs;
 
