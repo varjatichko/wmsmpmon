@@ -22,7 +22,7 @@ CURRENT MAINTAINER: Thomas Ribbrock <emgaron@gmx.net>
 #include	"general.h"
 #include	"standards.h"
 
-#define		VERSION		"3.5"
+#define		VERSION		"3.6"
 
 /*###### Dividers for redraw-loops ######################################*/
 #define		DIV1		6
@@ -40,17 +40,13 @@ int main(int argc, char **argv)
 {
 	XEvent		Event;
 
-	unsigned int	t0[TAILLE_T], /* history for CPU 0 -> Graph */
-			t1[TAILLE_T], /* history for CPU 1 -> Graph */
-			tm[TAILLE_T], /* history for CPU 0+1 -> Graph */
+	unsigned short offset = 0,
 			c1 = DIV1,
 			c2 = DIV2,
 			etat = 1,
 			lecture = 1,
-			delay = 250000,
-			delta = 0,
-			load = 0,
 			no_swap = FAUX,
+			draw_mem = FAUX,
 			draw_graph = VRAI,
 			NumCPUs,      /* number of CPUs */
 			i = 0,        /* counter */
@@ -60,12 +56,20 @@ int main(int argc, char **argv)
 			prec_mem2 = 0, /* memory_cache from previous round */
 			prec_swap = 0, /* swap from previous round */
 			load_width = 3; /* width of load bar: 3 for SMP, 8 for UP */
+	unsigned int	t0[TAILLE_T], /* history for CPU 0 -> Graph */
+			t1[TAILLE_T], /* history for CPU 1 -> Graph */
+			tm[TAILLE_T], /* history for CPU 0+1 -> Graph */
+			tram[TAILLE_T], /* history for total RAM -> Graph */
+			tcache[TAILLE_T], /* history for cache_mark -> Graph */
+			tswap[TAILLE_T], /* history for swap -> Graph */
+			delay = 250000,
+			delta = 0,
+			load = 0;
 
 	unsigned long	load0t = 0, load1t = 0, loadst = 0;
 
 	unsigned int	*CPU_Load; /* CPU load per CPU array */
 	unsigned int	t_idx = 0; /* Index to load history tables */
-	unsigned short offset = 0;
 
 	/********** Initialisation **********/
 	NumCPUs = NumCpus_DoInit();
@@ -127,6 +131,11 @@ int main(int argc, char **argv)
 			i++;
 			continue;
 		}
+		if (!strncmp(argv[i], "-draw-mem", 9)) {
+			draw_mem = VRAI;
+			i++;
+			continue;
+		}
 
 		/* if we get here, we found an illegal option */
 		usage(NumCPUs, "Illegal option!");
@@ -158,6 +167,9 @@ int main(int argc, char **argv)
 		t0[i] = 0;
 		t1[i] = 0;
 		tm[i] = 0;
+		tram[i] = 0;
+		tswap[i] = 0;
+		tcache[i] = 0;
 	}
 
 	/* -no-swap option was given */
@@ -217,6 +229,7 @@ int main(int argc, char **argv)
 							/* swap is disabled => show "none" */
 	    				copyXPMArea(83, 63, 83, 8, 29, 50);
 							copyXPMArea(1, 71, 18, 8, 6, 50);
+							mem=0;
 						} else {
 							/* draw swap usage */
 							copyXPMArea(30, 63, 30, 8, 29, 50);
@@ -229,7 +242,7 @@ int main(int argc, char **argv)
 									} else {
 										if (mem > 0) {
 											copyXPMArea(60, 63, 18, 8, 6, 50);
-										} else {
+									} else {
 											copyXPMArea(1, 71, 18, 8, 6, 50);
 									}
 								}
@@ -241,6 +254,13 @@ int main(int argc, char **argv)
 				c1 = 0;
 			}
 			if (c2 > DIV2) {
+				if (draw_mem) {
+					tram[t_idx] = prec_mem * HAUTEUR / 100;
+					tcache[t_idx] = prec_mem2 * HAUTEUR / 100;
+					if (!no_swap) tswap[t_idx] = prec_swap * HAUTEUR / 100;
+					else tswap[t_idx] = 0;
+
+				}
 				if ((t0[t_idx] = load0t / c2) > HAUTEUR)
 					t0[t_idx] = HAUTEUR;
 				t0[t_idx] /= 2;
@@ -267,8 +287,14 @@ int main(int argc, char **argv)
 				switch (etat) {
 				case 1 :
 					copyXPMArea(64, 32, TAILLE_T, HAUTEUR, 15, 5);
-					for (i = 0, load = t_idx; i < TAILLE_T; i ++, load++)
+					for (i = 0, load = t_idx; i < TAILLE_T; i++, load++) {
 						copyXPMArea(116, 0, 1, tm[load % TAILLE_T], 15 + i, HAUTEUR + 5 - tm[load % TAILLE_T]);
+						if (draw_mem) {
+							if (tram[load % TAILLE_T] != 0) copyXPMArea(68, 73, 1, 1, 15 + i, HAUTEUR + 5 - tram[load % TAILLE_T]);
+							if (tcache[load % TAILLE_T] != 0) copyXPMArea(68, 72, 1, 1, 15 + i, HAUTEUR + 5 - tcache[load % TAILLE_T]);
+							if (tswap[load % TAILLE_T] != 0 ) copyXPMArea(68, 71, 1, 1, 15 + i, HAUTEUR + 5 - tswap[load % TAILLE_T]);
+						}
+					}
 					break;
 				case 2 :
 					copyXPMArea(64, 0, TAILLE_T, HAUTEUR, 15, 5);
@@ -329,7 +355,8 @@ void usage(int cpus, const char *str)
 		    stderr);
 	}
 
-	fputs("          -no-swap  don't monitore swap size.\n\n"
+	fputs("          -no-swap  don't monitor swap size.\n"
+			"          -draw-mem draw memory usage graph (red-swap, yellow - non-cached, blue - allocated)\n\n"
 	    "<redseb@goupilfr.org> http://goupilfr.org\n"
 	    "<phir@gcu-squad.org> http://gcu-squad.org\n"
 	    "<emgaron@gmx.net> http://www.ribbrock.org\n",

@@ -4,7 +4,7 @@ Main changes compare to previous public (3.2) version:
  - Per CPU core load bars
  - Handling of no swap configurations
  - Colorized swap label based on swap usage
- 
+ - Memory usage graph (while "-draw-mem" option specified) 
 Enjoy!
 
 ---

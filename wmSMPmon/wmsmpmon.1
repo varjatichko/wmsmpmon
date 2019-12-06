@@ -1,4 +1,4 @@
-.TH WMSMPMON 1
+.TH WMSMPMON 1 "December 6, 2019"
 .\" NAME should be all caps, SECTION should be 1-8, maybe w/ subsection
 .\" other parms are allowed: see man(7), man(1)
 .SH NAME
@@ -11,7 +11,7 @@ wmSMPmon \- Window Maker System Monitor
 is a Window Maker dock application that displays the following
 information about the system:
 .TP
-- Current CPU utilization of up to two CPUs
+- Current CPU utilization of up to eight CPUs
 .TP
 - Up to two minutes history of CPU utilization
 .TP
@@ -19,10 +19,18 @@ information about the system:
 .TP
 - Current swap usage
 .PP
-On dual CPU systems,
+In dual CPU systems,
 .B wmSMPmon
 has three different styles for the utilization graph. To toggle between them
 just click into the graph.
+.PP
+In single CPU or SMP mode with more than two cores
+.B wmSMPmon
+has only total CPU utilisation mode.
+.PP
+The
+.B -draw-mem
+option adds graphs of total (blue line) and non-cached (yellow line) RAM usage as long as swap (red line) usage history. 
 .SH OPTIONS
 All options start with one dash.
 .TP
@@ -42,10 +50,14 @@ is also the style used on single CPU systems.
 .TP
 .B \-no-swap
 Do not monitor swap.
+.TP
+.B \-draw-mem
+Draw memory usage. Blue is for total RAM used, yellow is for non-cached amount, red is for swap usage.
 .SH "SEE ALSO"
 wmaker(1x)
 .SH AUTHOR
 This manual page was originally written by Alain Schroeder
 <alain@debian.org> and adapted for wmSMPmon 3 by Thomas Ribbrock
-<emgaron@gmx.net>
+<emgaron@gmx.net> and finaly improved by Aliaksei Varjat <varjat at gmail dot com>
+
 
