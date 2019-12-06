@@ -356,7 +356,7 @@ void usage(int cpus, const char *str)
 	}
 
 	fputs("          -no-swap  don't monitor swap size.\n"
-			"          -draw-mem draw memory usage graph (red-swap, yellow - non-cached, blue - allocated)\n\n"
+			"          -draw-mem draw memory usage graph (red - swap, yellow - non-cached, blue - allocated)\n\n"
 	    "<redseb@goupilfr.org> http://goupilfr.org\n"
 	    "<phir@gcu-squad.org> http://gcu-squad.org\n"
 	    "<emgaron@gmx.net> http://www.ribbrock.org\n",
