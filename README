@@ -1,0 +1,16 @@
+This software is reworked version of old wmSMPmon performance monitoring dock (NEXTStep/WindowMaker) applications. It's still based on original wmsmpcode code but added support of to 8 CPUs.
+
+Main changes compare to previous public (3.2) version:
+ - Per CPU core load bars
+ - Handling of no swap configurations
+ - Colorized swap label based on swap usage
+ 
+Enjoy!
+
+---
+
+This software comes with no warranty.
+Use it on your own risk.
+
+For more information please read the man page
+
