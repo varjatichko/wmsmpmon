@@ -174,7 +174,7 @@ int kstat_copy(const kstat_t *src, kstat_t *dst)
 }
 
 /* Get_CPU_Load returns an array of CPU loads, one for each CPU, scaled
-   to HAUTEUR. The array is defined and allocated by the main program
+   to HEIGHT. The array is defined and allocated by the main program
    and passed to the function as '*load'. The number of CPUs present
    is given in 'Cpu_tot' */
 unsigned int *Get_CPU_Load(unsigned int *load, unsigned int Cpu_tot)
@@ -199,7 +199,7 @@ unsigned int *Get_CPU_Load(unsigned int *load, unsigned int Cpu_tot)
 		}
 
 		cur_load = cpu_ticks_delta(&ksp_old[i], ksp_new);
-		factor = HAUTEUR / (double)cur_load;
+		factor = HEIGHT / (double)cur_load;
 
 		cur_load = kstat_delta(&ksp_old[i], ksp_new,
 		    cpu_states[1].field_name, &cpu_states[1].index) +

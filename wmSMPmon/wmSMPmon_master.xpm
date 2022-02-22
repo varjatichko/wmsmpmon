@@ -1,6 +1,6 @@
 /* XPM */
 static char * wmSMPmon_master_xpm[] = {
-"118 79 75 1",
+"118 79 76 1",
 " 	c #00000000FFFF",
 ".	c #202020202020",
 "X	c #60601B1B0000",
@@ -76,6 +76,7 @@ static char * wmSMPmon_master_xpm[] = {
 "R	c #AAAA00000000",
 "T	c #22222222AAAA",
 "U	c #AAAAAAAA2222",
+"W	c #FFFFFFFFFFFF",
 "                                                                ............................................XXXXXXXXoO",
 "                                                                ............................................++++++++@O",
 "                                                                ............................................########OO",
@@ -147,11 +148,11 @@ static char * wmSMPmon_master_xpm[] = {
 "KLJHGFDSAZCVBNMmnbvcxzlkhgfdsajiuytrewq0987654321<,>:;-=&$#+o...Y.YY.YY.Y...o..*  %jiuOtreOqO987O5O321O,O:;-o&$#+* Q  ",
 "KLJHGFDSAZCVBNMmnbvcxzlkhgfdsajiuytrewq0987654321<,>:;-=&$#+sYYYs.YoooY.sooo...*  %jiu@oooOq@OOO@5@oooO,@OOOO&$#+* Q  ",
 "KLJHGFDSAZCVBNMmnbvcxzlkhgfdsajiuytrewq0987654321<,>:;-=&$#+...................*  %jiuytrewq0987654321<,>:;-=&$#+* Q  ",
-".@OOO@.@ooo@.@OOO@..*+aQQQa.aoooa.aQQQa..*K+lPPPl.loool.lPPPl..*    R                                                 ",
-".O...o.O...O.O...O..*+Q...o.Q...Q.Q...Q..*K+P...o.P...P.P...P..*    T                                                 ",
-".O...o.O...O.O...O..*+Q...o.Q...Q.Q...Q..*K+P...o.P...P.P...P..*    U                                                 ",
-".@OOO@.@ooo@.@OOO@..*+aQQQa.aoooa.aQQQa..*K+lPPPl.loool.lPPPl..*                                                      ",
-".o...O.O.O.O.O...o..*+o...Q.Q.Q.Q.Q...o..*K+o...P.P.P.P.P...o..*                                                      ",
-".o...O.OO.OO.O...o..*+o...Q.QQ.QQ.Q...o..*K+o...P.PP.PP.P...o..*                                                      ",
-".@OOO@.OoooO.@ooo...*+aQQQa.QoooQ.aooo...*K+lPPPl.PoooP.looo...*                                                      ",
-"....................*+...................*K+...................*                                                      "};
+".@OOO@.@ooo@.@OOO@..*+aQQQa.aoooa.aQQQa..*K+lPPPl.loool.lPPPl..*    R     .@OOO@.@OOO@.@ooo@..*                       ",
+".O...o.O...O.O...O..*+Q...o.Q...Q.Q...Q..*K+P...o.P...P.P...P..*    T     .O...o.O...O.O...O..*                       ",
+".O...o.O...O.O...O..*+Q...o.Q...Q.Q...Q..*K+P...o.P...P.P...P..*    U     .O...o.O...O.O...O..*                       ",
+".@OOO@.@ooo@.@OOO@..*+aQQQa.aoooa.aQQQa..*K+lPPPl.loool.lPPPl..*    W     .@ooO@.@OOO@.@ooo@..*                       ",
+".o...O.O.O.O.O...o..*+o...Q.Q.Q.Q.Q...o..*K+o...P.P.P.P.P...o..*          .O...O.O...o.O...O..*                       ",
+".o...O.OO.OO.O...o..*+o...Q.QQ.QQ.Q...o..*K+o...P.PP.PP.P...o..*          .O...O.O...o.O...O..*                       ",
+".@OOO@.OoooO.@ooo...*+aQQQa.QoooQ.aooo...*K+lPPPl.PoooP.looo...*          .@OOO@.@ooo...OOO...*                       ",
+"....................*+...................*K+...................*          ....................*                       "};

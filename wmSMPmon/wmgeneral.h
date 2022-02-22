@@ -36,7 +36,7 @@ typedef struct {
  /* Global variable */
 /*******************/
 
-Display		*display;
+static Display		*display;
 
   /***********************/
  /* Function Prototypes */

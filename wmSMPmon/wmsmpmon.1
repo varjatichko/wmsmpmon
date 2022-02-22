@@ -1,4 +1,4 @@
-.TH WMSMPMON 1 "December 6, 2019"
+.TH WMSMPMON 1 "February 21, 2022"
 .\" NAME should be all caps, SECTION should be 1-8, maybe w/ subsection
 .\" other parms are allowed: see man(7), man(1)
 .SH NAME
@@ -51,8 +51,11 @@ is also the style used on single CPU systems.
 .B \-no-swap
 Do not monitor swap.
 .TP
+.B \-nvidia
+Monitor GPU usage instead of swap.
+.TP
 .B \-draw-mem
-Draw memory usage. Blue is for total RAM used, yellow is for non-cached amount, red is for swap usage.
+Draw memory usage. Blue is for total RAM used, yellow is for non-cached amount, red is for swap/Video RAM, white is for GPU usage.
 .SH "SEE ALSO"
 wmaker(1x)
 .SH AUTHOR

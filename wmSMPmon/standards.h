@@ -22,29 +22,24 @@
 #include <errno.h>
 #include <stdarg.h>
 
-/*###### Valeurs de test ################################################*/
-#define	VRAI	1
-#define FAUX	0
-#define OK	0
-#define ERREUR	-1
 
 /*###### Buffer Sizes ###################################################*/
 #define SMLBUFSIZ   256
 #define BIGBUFSIZ  2048
 
 /*###### Image Size Definitions #########################################*/
-#define	TAILLE_T 44 /* Width Graph */
-#define	HAUTEUR  31 /* Max. height of CPU Load Bar+Graph */
+#define	WIDTH_T 44 /* Width Graph */
+#define	HEIGHT  31 /* Max. height of CPU Load Bar+Graph */
 
-/* Program name used in error messages */
-char *Myname;
+// file descriptor for /proc/stats
+static FILE *fd_stat = NULL;
 
 /* NumCPUs_DoInit returns the number of CPUs present in the system and
    performs any initialization necessary for the sysinfo-XXX module */
 unsigned int NumCpus_DoInit(void);
 
 /* Get_CPU_Load returns an array of CPU loads, one for each CPU, scaled
-   to HAUTEUR. The array is defined and allocated by the main program
+   to HEIGHT. The array is defined and allocated by the main program
    and passed to the function as '*load'. The number of CPUs present
    is given in 'Cpu_tot' */
 unsigned int *Get_CPU_Load(unsigned int *load, unsigned int Cpu_tot);
@@ -53,5 +48,10 @@ unsigned int *Get_CPU_Load(unsigned int *load, unsigned int Cpu_tot);
 unsigned int Get_Memory(void);
 unsigned int Get_Memory2(void);
 unsigned int Get_Swap(void);
+#ifdef HAVE_NVIDIA
+unsigned int init_nvmi(void);
+unsigned int Get_GPU(void);
+unsigned int Get_VRAM(void);
+#endif
 
 #endif /* WMSMP_STANDARDS_H */

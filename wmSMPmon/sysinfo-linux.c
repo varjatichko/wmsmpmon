@@ -17,7 +17,6 @@
   ######################################################################*/
 
 #include "sysinfo-linux.h" /* include self to verify prototypes */
-#include "general.h"
 #include "standards.h"
 
 #define BAD_OPEN_MESSAGE					\
@@ -277,7 +276,6 @@ nextline:
  *    cpus[Cpu_tot]        == tics from the 1st /proc/stat line */
 static CPU_t *cpus_refresh (CPU_t *cpus, unsigned int Cpu_tot)
 {
-	static FILE *fp = NULL;
 	int i;
 
 	// enough for a /proc/stat CPU line (not the intr line)
@@ -285,29 +283,36 @@ static CPU_t *cpus_refresh (CPU_t *cpus, unsigned int Cpu_tot)
 
 	/* by opening this file once, we'll avoid the hit on minor page faults
 	   (sorry Linux, but you'll have to close it for us) */
-	if (!fp) {
-		if (!(fp = fopen("/proc/stat", "r")))
-			std_err(fmtmk("Failed /proc/stat open: %s",
-			    strerror(errno)));
+	if (!fd_stat) {
+		if (!(fd_stat = fopen("/proc/stat", "r"))) {
+			fprintf(stderr, "Failed to open /proc/stat: %s\n",  strerror(errno));
+			return(NULL);
+		}
 		/* note: we allocate one more CPU_t than Cpu_tot so that the
 		   last slot can hold tics representing the /proc/stat cpu
 		   summary (the first line read) -- that slot supports our
 		   View_CPUSUM toggle */
-		cpus = alloc_c((1 + Cpu_tot) * sizeof(CPU_t));
+		cpus = calloc((1 + Cpu_tot),sizeof(CPU_t));
 	}
-	rewind(fp);
-	fflush(fp);
+	rewind(fd_stat);
+	fflush(fd_stat);
 
 	// first value the last slot with the cpu summary line
-	if (!fgets(buf, sizeof(buf), fp))
-		std_err("failed /proc/stat read");
+	if (!fgets(buf, sizeof(buf), fd_stat)) {
+		fprintf(stderr, "Failed to read /proc/stat\n");
+		fclose(fd_stat);
+		fd_stat = NULL;
+		return (NULL);
+	}
 
 	cpus[Cpu_tot].x = 0;  // FIXME: can't tell by kernel version number
 	cpus[Cpu_tot].y = 0;  // FIXME: can't tell by kernel version number
 	if (4 > sscanf(buf, CPU_FMTS_JUST1, &cpus[Cpu_tot].u, &cpus[Cpu_tot].n,
 	    &cpus[Cpu_tot].s, &cpus[Cpu_tot].i, &cpus[Cpu_tot].w,
-	    &cpus[Cpu_tot].x, &cpus[Cpu_tot].y))
-		std_err("failed /proc/stat read");
+	    &cpus[Cpu_tot].x, &cpus[Cpu_tot].y)) {
+				fprintf(stderr, "Failed to parse /proc/stat\n");
+				return (NULL);
+	}
 	// and just in case we're 2.2.xx compiled without SMP support...
 	if (1 == Cpu_tot) {
 		/* do it "manually", otherwise we overwrite charge and total */
@@ -322,14 +327,16 @@ static CPU_t *cpus_refresh (CPU_t *cpus, unsigned int Cpu_tot)
 
 	// now value each separate cpu's tics
 	for (i = 0; 1 < Cpu_tot && i < Cpu_tot; i++) {
-		if (!fgets(buf, sizeof(buf), fp))
-			std_err("failed /proc/stat read");
+		if (!fgets(buf, sizeof(buf), fd_stat)) {
+			fprintf(stderr, "Failed to read per-CPU entry in /proc/stat\n");
+		}
 		cpus[i].x = 0;  // FIXME: can't tell by kernel version number
 		cpus[i].y = 0;  // FIXME: can't tell by kernel version number
 		if (4 > sscanf(buf, CPU_FMTS_MULTI, &cpus[i].u,
 		    &cpus[i].n, &cpus[i].s, &cpus[i].i, &cpus[i].w,
-		    &cpus[i].x, &cpus[i].y))
-			std_err("failed /proc/stat read");
+		    &cpus[i].x, &cpus[i].y)){
+					fprintf(stderr, "Failed to parse per-CPU stats /proc/stat\n");
+		}
 	}
 	return cpus;
 }
@@ -346,8 +353,8 @@ unsigned int *Get_CPU_Load(unsigned int *load, unsigned int Cpu_tot)
 		charge = smpcpu[j].u + smpcpu[j].s + smpcpu[j].n;
 		total = charge + smpcpu[j].i;
 
-		/* scale cpu to a maximum of HAUTEUR */
-		load[j] = ((HAUTEUR * (charge - smpcpu[j].charge)) /
+		/* scale cpu to a maximum of HEIGHT */
+		load[j] = ((HEIGHT * (charge - smpcpu[j].charge)) /
 		    (total - smpcpu[j].total + 0.001)) + 1 ;
 		smpcpu[j].total = total ;
 		smpcpu[j].charge = charge ;

@@ -1,3 +1,9 @@
+Author: Alexey Varjat
+
+This work based on wmSMPmon by Thomas Ribbrock <emgaron@gmx.net>, November 2004
+
+Here is credits of original Thomas' work:
+
 Un grand merci à Ben Jarvis[ankou] <bjarvis@d.umn.edu> (wmlm) à qui j'ai
 "emprunté" une grande partie du code et à
 Martijn Pieterse <pieterse@xs4all.nl>, qui à permis de développer si
@@ -17,4 +23,3 @@ Also, thanks to the authors/contributors of top/procps:
         - Fabian Frederick
 
 Without their code, sysinfo-linux.c would have been a lot more difficult.
-                             Thomas Ribbrock <emgaron@gmx.net>, November 2004
